@@ -1,9 +1,12 @@
 import { Formik } from "formik";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import { login } from "../config/firebase";
 import { useUserContext } from "../context/UserContext";
-import * as Yup from "yup";
+
+import { LoadingButton } from "@mui/lab";
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 
 const Login = () => {
     const { user } = useUserContext();
@@ -36,13 +39,26 @@ const Login = () => {
     };
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email("Email no válido").required("Email obligatorio"),
-        password: Yup.string().trim().min(6, "Mínimo 6 carácteres").required("Password obligatorio"),
+        email: Yup.string()
+            .email("Email no válido")
+            .required("Email obligatorio"),
+        password: Yup.string()
+            .trim()
+            .min(6, "Mínimo 6 carácteres")
+            .required("Password obligatorio"),
     });
 
     return (
-        <>
-            <h1>Login</h1>
+        <Box sx={{ mt: 8, maxWidth: "400px", mx: "auto", textAlign: "center" }}>
+            <Avatar sx={{ mx: "auto", bgcolor: "#111" }} />
+
+            <Typography
+                variant="h5"
+                component="h1"
+            >
+                Login
+            </Typography>
+
             <Formik
                 initialValues={{ email: "", password: "" }}
                 onSubmit={onSubmit}
@@ -57,32 +73,69 @@ const Login = () => {
                     touched,
                     handleBlur,
                 }) => (
-                    <form onSubmit={handleSubmit}>
-                        <input
+                    <Box
+                        onSubmit={handleSubmit}
+                        sx={{ mt: 1 }}
+                        component="form"
+                    >
+                        <TextField
                             type="text"
-                            placeholder="email"
+                            placeholder="email@example.com"
                             value={values.email}
                             onChange={handleChange}
                             name="email"
                             onBlur={handleBlur}
+                            id="email"
+                            label="Ingrese Email"
+                            fullWidth
+                            sx={{ mb: 3 }}
+                            error={errors.email && touched.email}
+                            helperText={
+                                errors.email && touched.email && errors.email
+                            }
                         />
-                        {errors.email && touched.email && errors.email}
-                        <input
+
+                        <TextField
                             type="password"
-                            placeholder="password"
+                            placeholder="123123"
                             value={values.password}
                             onChange={handleChange}
                             name="password"
                             onBlur={handleBlur}
+                            id="password"
+                            label="Ingrese Contraseña"
+                            fullWidth
+                            sx={{ mb: 3 }}
+                            error={errors.password && touched.password}
+                            helperText={
+                                errors.password &&
+                                touched.password &&
+                                errors.password
+                            }
                         />
-                        {errors.password && touched.password && errors.password}
-                        <button type="submit" disabled={isSubmitting}>
-                            Login
-                        </button>
-                    </form>
+
+                        <LoadingButton
+                            type="submit"
+                            disabled={isSubmitting}
+                            loading={isSubmitting}
+                            variant="contained"
+                            fullWidth
+                            sx={{ mb: 3 }}
+                        >
+                            Acceder
+                        </LoadingButton>
+
+                        <Button
+                            fullWidth
+                            component={Link}
+                            to="/register"
+                        >
+                            ¿No tienes cuenta? Regístrate
+                        </Button>
+                    </Box>
                 )}
             </Formik>
-        </>
+        </Box>
     );
 };
 

@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { logOut } from "../config/firebase";
 
 const Dashboard = () => {
@@ -8,7 +9,12 @@ const Dashboard = () => {
     return (
         <>
             <h1>Dashboard</h1>
-            <button onClick={handleLogout}>LogOut</button>
+            <Button
+                variant="contained"
+                onClick={handleLogout}
+            >
+                Logout
+            </Button>
         </>
     );
 };

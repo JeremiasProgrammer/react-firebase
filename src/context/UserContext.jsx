@@ -1,8 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { createContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config/firebase";
 
 const UserContext = createContext();
@@ -13,7 +10,6 @@ export default function UserContextProvider({ children }) {
     // Check si user está activo
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            console.log(user);
             setUser(user);
         });
 
